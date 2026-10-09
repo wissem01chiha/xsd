@@ -16,76 +16,88 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-file(GLOB cutl_compiler_sources
-    cutl/compiler/*.cxx
-    cutl/compiler/*.ixx
-    cutl/compiler/*.hxx
-    cutl/compiler/*.txx
+set(cutl_compiler_sources
+    libcutl/compiler/code-stream.hxx
+    libcutl/compiler/code-stream.txx
+    libcutl/compiler/context.cxx
+    libcutl/compiler/context.hxx
+    libcutl/compiler/context.txx
+    libcutl/compiler/cxx-indenter.cxx
+    libcutl/compiler/cxx-indenter.hxx
+    libcutl/compiler/cxx-indenter.txx
+    libcutl/compiler/sloc-counter.hxx
+    libcutl/compiler/sloc-counter.txx
+    libcutl/compiler/traversal.hxx
+    libcutl/compiler/traversal.txx
+    libcutl/compiler/type-id.hxx
+    libcutl/compiler/type-id.txx
+    libcutl/compiler/type-info.cxx
+    libcutl/compiler/type-info.hxx
 )
 
-set(GLOB cutl_container_sources
-    cutl/container/*.cxx
-    cutl/container/*.ixx
-    cutl/container/*.hxx
-    cutl/container/*.txx
+set(cutl_container_sources
+    libcutl/container/any.hxx
+    libcutl/container/graph.hxx
+    libcutl/container/graph.txx
+    libcutl/container/key.hxx
+    libcutl/container/map-iterator.hxx
+    libcutl/container/multi-index.hxx
+    libcutl/container/pointer-iterator.hxx
 )
 
-set(GLOB cutl_details_sources  
-    cutl/details/*.cxx
-    cutl/details/*.ixx
-    cutl/details/*.hxx
-    cutl/details/*.txx
+set(cutl_fs_sources
+    libcutl/fs/auto-remove.cxx
+    libcutl/fs/auto-remove.hxx
+    libcutl/fs/exception.cxx
+    libcutl/fs/exception.hxx
+    libcutl/fs/path.cxx
+    libcutl/fs/path.hxx
+    libcutl/fs/path.txx
 )
 
-set(GLOB cutl_fs_sources
-    cutl/fs/*.cxx
-    cutl/fs/*.ixx
-    cutl/fs/*.hxx
-    cutl/fs/*.txx
+set(cutl_meta_sources
+    libcutl/meta/answer.hxx
+    libcutl/meta/class-p.hxx
+    libcutl/meta/polymorphic-p.hxx
+    libcutl/meta/remove-c.hxx
+    libcutl/meta/remove-cv.hxx
+    libcutl/meta/remove-p.hxx
+    libcutl/meta/remove-v.hxx
 )
 
-set(GLOB cutl_meta_sources
-    cutl/meta/*.cxx
-    cutl/meta/*.ixx
-    cutl/meta/*.hxx
-    cutl/meta/*.txx
+set(cutl_re_sources
+    libcutl/re.hxx
+    libcutl/re/re.cxx
+    libcutl/re/re.txx
 )
 
-set(GLOB cutl_re_sources
-    cutl/re/*.cxx
-    cutl/re/*.ixx
-    cutl/re/*.hxx
-    cutl/re/*.txx
+set(cutl_shared_ptr_sources
+    libcutl/shared-ptr.hxx
+    libcutl/shared-ptr/base.cxx
+    libcutl/shared-ptr/base.hxx
+    libcutl/shared-ptr/base.txx
+    libcutl/static-ptr.hxx
 )
 
-set(GLOB cutl_shared_ptr_sources
-    cutl/shared_ptr/*.cxx
-    cutl/shared_ptr/*.ixx
-    cutl/shared_ptr/*.hxx
-    cutl/shared_ptr/*.txx
-)
-
-set(GLOB cutl_xml_sources  
-    cutl/xml/*.cxx
-    cutl/xml/*.ixx
-    cutl/xml/*.hxx
-    cutl/xml/*.txx
-)
-set(GLOB cutl_cutl_sources
-    cutl/cutl/*.cxx
-    cutl/cutl/*.hxx
+set(cutl_root_sources
+    libcutl/exception.cxx
+    libcutl/exception.hxx
 )
 
 set(cutl_sources
     ${cutl_compiler_sources}
     ${cutl_container_sources}
-    ${cutl_details_sources}
     ${cutl_fs_sources}
     ${cutl_meta_sources}
     ${cutl_re_sources}
     ${cutl_shared_ptr_sources}
-    ${cutl_xml_sources}
-    ${cutl_cutl_sources}    
+    ${cutl_root_sources}
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/libcutl/version.hxx.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/libcutl/version.hxx"
+    @ONLY
 )
 
 if(BUILD_SHARED_LIBS)
@@ -99,3 +111,4 @@ target_include_directories(cutl
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include>
 )
+target_include_directories(cutl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

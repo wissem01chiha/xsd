@@ -32,8 +32,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/libxsd-cmake")
 # ------------------------------------------------------------
 include(extern/xercesc)
 add_subdirectory(libxsd-extern/libcutl)
-
-#add_subdirectory(libxsd-frontend)
+add_subdirectory(libxsd-extern/libxsd-frontend)
  
 # find_package(libcutl CONFIG REQUIRED)
 # find_package(XercesC REQUIRED)
@@ -138,60 +137,65 @@ set(XSD_GENERATED_SOURCES
 # Executable
 # ------------------------------------------------------------
 
-# add_executable(xsd
-#     ${XSD_SOURCES}
-#     ${XSD_GENERATED_SOURCES}
-# )
+add_executable(xsd
+    ${XSD_SOURCES}
+    ${XSD_GENERATED_SOURCES}
+)
 
-# target_include_directories(xsd
-#     PRIVATE
-#         "${CMAKE_CURRENT_BINARY_DIR}/xsd"
-#         "${CMAKE_CURRENT_SOURCE_DIR}/xsd"
-#         "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd"
-#         "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd/pregenerated"
-# )
+target_include_directories(xsd
+    PRIVATE
+         "${CMAKE_CURRENT_BINARY_DIR}/xsd"
+         "${CMAKE_CURRENT_SOURCE_DIR}/xsd"
+         "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd"
+         "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd/pregenerated"
+)
 
-# target_link_libraries(xsd
-#     PRIVATE
-#         xsd-frontend
-#         cutl
-#         xerces-c
-# )
+target_link_libraries(xsd
+     PRIVATE
+         xsd-frontend
+         cutl
+         xerces-c
+)
 
-# target_compile_features(xsd
-#     PRIVATE
-#         cxx_std_11
-# )
+get_target_property(xsd-frontend-include-dirs xsd-frontend INCLUDE_DIRECTORIES)
 
-# set(XSD_COPYRIGHT
-#     "Copyright (c) 2005-2026 Code Synthesis Tools CC"
-#     CACHE STRING "XSD copyright notice"
-# )
+target_include_directories(xsd PUBLIC 
+    ${xsd-frontend-include-dirs}
+)
 
-# target_compile_definitions(xsd
-#     PRIVATE
-#         XSD_COPYRIGHT="${XSD_COPYRIGHT}"
-# )
+target_compile_features(xsd
+     PRIVATE
+         cxx_std_11
+)
 
-# set_target_properties(xsd PROPERTIES
-#     OUTPUT_NAME xsdcxx
-# )
+set(XSD_COPYRIGHT
+     "Copyright (c) 2005-2026 Code Synthesis Tools CC"
+     CACHE STRING "XSD copyright notice"
+)
+
+target_compile_definitions(xsd
+    PRIVATE
+        XSD_COPYRIGHT="${XSD_COPYRIGHT}"
+)
+
+set_target_properties(xsd PROPERTIES
+    OUTPUT_NAME xsdcxx
+)
 
 
+include(GNUInstallDirs)
 
-# include(GNUInstallDirs)
+#/usr/bin
+install(TARGETS xsd
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
 
-# # /usr/bin
-# install(TARGETS xsd
-#     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-# )
-
-# # /usr/include/xsd
-# install(
-#     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/libxsd/xsd"
-#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-#     FILES_MATCHING
-#         PATTERN "*.hxx"
-#         PATTERN "*.ixx"
-#         PATTERN "*.txx"
-# )
+#/usr/include/xsd
+install(
+    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/libxsd/xsd"
+     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+     FILES_MATCHING
+        PATTERN "*.hxx"
+        PATTERN "*.ixx"
+        PATTERN "*.txx"
+)

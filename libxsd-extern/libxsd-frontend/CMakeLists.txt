@@ -24,16 +24,46 @@ set(sementic_graph_sources
     libxsd-frontend/semantic-graph/attribute.cxx
 )
 
-add_library(libxsd-frontend STATIC 
+set(xsd_frontend_sources
     libxsd-frontend/types.cxx
     libxsd-frontend/parser.cxx
     libxsd-frontend/schema-dom-parser.cxx
 )
-target_include_directories(libxsd-frontend
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/libxsd-frontend/version.hxx.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/libxsd-frontend/version.hxx"
+    @ONLY
+)
+
+if(BUILD_SHARED_LIBS)
+    add_library(xsd-frontend SHARED 
+        ${generators_sources}
+        ${sementic_graph_sources}
+        ${xsd_frontend_sources}
+    )
+else()
+    add_library(xsd-frontend STATIC 
+        ${generators_sources}
+        ${sementic_graph_sources}
+        ${xsd_frontend_sources}
+    )
+endif()
+
+get_target_property(cutl_include_dirs cutl INCLUDE_DIRECTORIES)
+
+target_include_directories(xsd-frontend
     PUBLIC
-        "${CMAKE_CURRENT_SOURCE_DIR}/libxsd-frontend"
+        "${CMAKE_CURRENT_SOURCE_DIR}/xsd-frontend"
+        "${cutl_include_dirs}"
 )
-target_link_libraries(libxsd-frontend PRIVATE
- cutl
- xerces-c
+target_include_directories(xsd-frontend PRIVATE 
+   ${CMAKE_CURRENT_SOURCE_DIR}
+)    
+
+target_link_libraries(xsd-frontend PRIVATE
+    cutl
+    xerces-c
 )
+
+add_dependencies(xsd-frontend cutl xerces-c)

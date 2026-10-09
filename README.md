@@ -1,7 +1,7 @@
 
 >[!CAUTION]
-> This is an unofficial fork for the  Code Synthesis XSD Compiler With Support
-> for CMake and [Bazel](https://bazel.build/) build Workflows.
+> this is an unofficial fork for the code synthesis xsd data binding compiler targeting  support
+> for [cmake](https://github.com/Kitware/CMake) generator and [bazel](https://bazel.build/) build systems, xsd related implemntation issues should be redirected to original repository, code synthesis do not support other build systems then [build2](https://github.com/build2/build2), thus this fork is community driven work and build issues will be addrssed progressivlly. 
 
 # XSD
 

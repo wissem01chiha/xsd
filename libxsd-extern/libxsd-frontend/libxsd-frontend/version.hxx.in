@@ -46,6 +46,6 @@
 
 #include <libcutl/version.hxx>
 
-$libcutl.check(LIBCUTL_VERSION, LIBCUTL_SNAPSHOT)$
+//$libcutl.check(LIBCUTL_VERSION, LIBCUTL_SNAPSHOT)$
 
 #endif // LIBXSD_FRONTEND_VERSION
