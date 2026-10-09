@@ -1,102 +1,197 @@
-# CMakeLists.txt for XSD/e Compiler
-# Written by Wissem Chiha, Copyright (c) 2026 <chihawissem08@gmail.com>
-# SPDX-License-Identifier: Copyright (c) 2005-2025 Code Synthesis. All rights reserved.
-cmake_minimum_required(VERSION 3.18..3.24 FATAL_ERROR)
+# CMake build for xsd
+#
+# Written by Wissem Chiha <chihawissem08@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-project(libxsde LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.16)
 
-# ============================================================================
-# Properties
-# ============================================================================
-set(PROJECT_VERSION "4.2.0")
-set(PROJECT_HOMEPAGE_URL "https://github.com/codesynthesis-com/xsd")
-set(PROJECT_DESCRIPTION "XML Schema to C++ data binding compiler")
-
-# ============================================================================
-# CPack
-# ============================================================================
-set(CPACK_PACKAGE_VENDOR "Code-Synthesis")
-set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_SOURCE_DIR}/README.md)
-set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
-set(CPACK_RESOURCE_FILE_README ${CMAKE_SOURCE_DIR}/README.md)
-set(CPACK_COMPONENTS_ALL Development Documentation Runtime)
-
-# ============================================================================
-# CTest
-# ============================================================================
-set(CTEST_OUTPUT_ON_FAILURE TRUE)
-
-# ============================================================================
-# CMake
-# ============================================================================
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_C_VISIBILITY_PRESET hidden)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS ON)
-set(CMAKE_C_STANDARD 17)
-
-# ============================================================================
-# Configuration
-# ============================================================================
-option(XSD_BUILD_TESTS "Build XSD unit tests" ON)
-option(XSD_BUILD_EXAMPLES "Build XSD example applications" ON)
-option(XSD_BUILD_SHARED_LIBS "Build XSD as a shared library" OFF)
-option(XSD_BUILD_DOCUMENTATION "Build XSD documentation" OFF)
-option(XSD_INSTALL_HEADERS "Install XSD header files" ON)
-
-# ============================================================================
-# Defaults
-# ============================================================================
-get_property(IS_MULTI GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if(NOT DEFINED CMAKE_BUILD_TYPE AND NOT IS_MULTI)
-    message(STATUS "No CMAKE_BUILD_TYPE set -- using Release")
-    set(CMAKE_BUILD_TYPE Release)
-endif(NOT DEFINED CMAKE_BUILD_TYPE AND NOT IS_MULTI)
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/install" 
-    CACHE PATH "Default install path" FORCE)
-endif()
-
-
-# ============================================================================
-# Testing
-# ============================================================================
-if(XSD_BUILD_TESTS)
-    include(CTest)
-    enable_testing()
-endif()
-
-# ============================================================================
-# Include Directories
-# ============================================================================
-
-
-# ============================================================================
-# Source Files
-# ============================================================================
-set(xsd_sources
-    xsd/xsd.cxx
-    xsd/xsd/cxx/elements.cxx
-    xsd/xsd/cxx/literal-map.cxx
-    xsd/xsd/cxx/option-types.cxx
+project(xsd
+    VERSION 4.2.0
+    LANGUAGES CXX
 )
 
-set(libxsd_sources
+include(GNUInstallDirs)
 
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/libxsd-cmake")
+
+# ------------------------------------------------------------
+# Dependencies
+# ------------------------------------------------------------
+include(extern/xercesc)
+add_subdirectory(libxsd-extern/libcutl)
+
+#add_subdirectory(libxsd-frontend)
+ 
+# find_package(libcutl CONFIG REQUIRED)
+# find_package(XercesC REQUIRED)
+
+# ------------------------------------------------------------
+# Version
+# ------------------------------------------------------------
+
+set(XSD_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(XSD_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(XSD_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+
+set(XSD_VERSION_STR  "${PROJECT_VERSION}")
+set(XSD_VERSION_ID   "${PROJECT_VERSION}")
+set(XSD_VERSION_FULL "${PROJECT_VERSION}")
+
+# Final release.
+set(XSD_PRE_RELEASE 0)
+set(XSD_SNAPSHOT 0)
+set(XSD_SNAPSHOT_ID "")
+
+# Numeric version:
+#
+# AAAAA BBBBB CCCCC DDDE
+#
+math(EXPR XSD_VERSION_NUMBER
+    "${XSD_VERSION_MAJOR} * 10000000000000"
 )
 
-set(libxsd_headers
-
+math(EXPR XSD_VERSION_NUMBER
+    "${XSD_VERSION_NUMBER} + ${XSD_VERSION_MINOR} * 100000000"
 )
 
-set(xsd_example_sources
-
+math(EXPR XSD_VERSION_NUMBER
+    "${XSD_VERSION_NUMBER} + ${XSD_VERSION_PATCH} * 1000"
 )
 
-set(xsd_test_sources
-    xsd-tests/cxx/parser/built-in/driver.cxx
-    xsd-tests/cxx/parser/enumeration/driver.cxx
+set(XSD_VERSION_HEADER
+"// file      : xsd/version.hxx
+// license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
+
+#ifndef XSD_VERSION
+
+#define XSD_VERSION       ${XSD_VERSION_NUMBER}ULL
+#define XSD_VERSION_STR   \"${XSD_VERSION_STR}\"
+#define XSD_VERSION_ID    \"${XSD_VERSION_ID}\"
+#define XSD_VERSION_FULL  \"${XSD_VERSION_FULL}\"
+
+#define XSD_VERSION_MAJOR ${XSD_VERSION_MAJOR}
+#define XSD_VERSION_MINOR ${XSD_VERSION_MINOR}
+#define XSD_VERSION_PATCH ${XSD_VERSION_PATCH}
+
+#define XSD_PRE_RELEASE   ${XSD_PRE_RELEASE}
+
+#define XSD_SNAPSHOT      ${XSD_SNAPSHOT}ULL
+#define XSD_SNAPSHOT_ID   \"${XSD_SNAPSHOT_ID}\"
+
+#include <xercesc/util/XercesVersion.hpp>
+#include <libcutl/version.hxx>
+#include <libxsd-frontend/version.hxx>
+
+#endif // XSD_VERSION
+")
+
+file(GENERATE
+    OUTPUT
+        "${CMAKE_CURRENT_BINARY_DIR}/xsd/xsd/version.hxx"
+    CONTENT
+        "${XSD_VERSION_HEADER}"
 )
-# ============================================================================
-# Libraries
-# ============================================================================
+
+# ------------------------------------------------------------
+# Sources
+# ------------------------------------------------------------
+
+file(GLOB_RECURSE XSD_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd/*.cxx"
+)
+
+# Don't compile the pregenerated files through the normal source
+# glob. They are explicitly listed below.
+list(FILTER XSD_SOURCES EXCLUDE REGEX
+    "/pregenerated/"
+)
+
+# ------------------------------------------------------------
+# Pregenerated CLI sources
+# ------------------------------------------------------------
+
+set(XSD_PREGENERATED_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd/pregenerated/xsd"
+)
+
+set(XSD_GENERATED_SOURCES
+    "${XSD_PREGENERATED_DIR}/options.cxx"
+    "${XSD_PREGENERATED_DIR}/cxx/options.cxx"
+    "${XSD_PREGENERATED_DIR}/cxx/parser/options.cxx"
+    "${XSD_PREGENERATED_DIR}/cxx/tree/options.cxx"
+)
+
+# ------------------------------------------------------------
+# Executable
+# ------------------------------------------------------------
+
+# add_executable(xsd
+#     ${XSD_SOURCES}
+#     ${XSD_GENERATED_SOURCES}
+# )
+
+# target_include_directories(xsd
+#     PRIVATE
+#         "${CMAKE_CURRENT_BINARY_DIR}/xsd"
+#         "${CMAKE_CURRENT_SOURCE_DIR}/xsd"
+#         "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd"
+#         "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd/pregenerated"
+# )
+
+# target_link_libraries(xsd
+#     PRIVATE
+#         xsd-frontend
+#         cutl
+#         xerces-c
+# )
+
+# target_compile_features(xsd
+#     PRIVATE
+#         cxx_std_11
+# )
+
+# set(XSD_COPYRIGHT
+#     "Copyright (c) 2005-2026 Code Synthesis Tools CC"
+#     CACHE STRING "XSD copyright notice"
+# )
+
+# target_compile_definitions(xsd
+#     PRIVATE
+#         XSD_COPYRIGHT="${XSD_COPYRIGHT}"
+# )
+
+# set_target_properties(xsd PROPERTIES
+#     OUTPUT_NAME xsdcxx
+# )
+
+
+
+# include(GNUInstallDirs)
+
+# # /usr/bin
+# install(TARGETS xsd
+#     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+# )
+
+# # /usr/include/xsd
+# install(
+#     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/libxsd/xsd"
+#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+#     FILES_MATCHING
+#         PATTERN "*.hxx"
+#         PATTERN "*.ixx"
+#         PATTERN "*.txx"
+# )

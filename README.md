@@ -1,3 +1,8 @@
+
+>[!CAUTION]
+> This is an unofficial fork for the  Code Synthesis XSD Compiler With Support
+> for CMake and [Bazel](https://bazel.build/) build Workflows.
+
 # XSD
 
 XSD is an open-source, cross-platform XML Schema to C++ data binding
