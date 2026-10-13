@@ -1,7 +1,10 @@
 
 >[!CAUTION]
-> this is an unofficial fork for the code synthesis xsd data binding compiler targeting  support
-> for [cmake](https://github.com/Kitware/CMake) generator and [bazel](https://bazel.build/) build systems, xsd related implemntation issues should be redirected to original repository, code synthesis do not support other build systems then [build2](https://github.com/build2/build2), thus this fork is community driven work and build issues will be addrssed progressivlly. 
+> This is an unofficial fork for the code synthesis xsd data binding compiler targeting  support
+> for [cmake](https://github.com/Kitware/CMake) generator, xsd related implemntation issues should be redirected to original repository, code synthesis do not support other build systems then [build2](https://github.com/build2/build2), thus this fork is community driven work and build issues will be addrssed progressivlly. refer to [Install](./INSTALL-CMAKE) guide for build guidelines
+
+[![cmake](https://github.com/wissem01chiha/xsd/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/wissem01chiha/xsd/actions/workflows/cmake-multi-platform.yml)
+![GitHub License](https://img.shields.io/github/license/wissem01chiha/xsd)
 
 # XSD
 

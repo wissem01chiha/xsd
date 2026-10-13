@@ -1,6 +1,0 @@
-driver
-
-# Testscript output directory (can be symlink).
-#
-test
-test-*

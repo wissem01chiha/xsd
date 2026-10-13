@@ -16,31 +16,24 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16 )
 
-project(xsd
-    VERSION 4.2.0
-    LANGUAGES CXX
-)
+project(xsd VERSION 4.2.0 LANGUAGES CXX)
+
+option(BUILD_SHARED_LIBS "Build XSD as shared library" OFF)
+option(BUILD_XSD_EXAMPLES "Build examples scripts" OFF)
+option(BUILD_XSD_TESTS "Build test scripts" OFF)
 
 include(GNUInstallDirs)
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-# ------------------------------------------------------------
 # Dependencies
-# ------------------------------------------------------------
 include(extern/xercesc)
 include(extern/libcutl)
-add_subdirectory(libxsd-extern/libxsd-frontend)
+add_subdirectory(frontend)
  
-# find_package(libcutl CONFIG REQUIRED)
-# find_package(XercesC REQUIRED)
-
-# ------------------------------------------------------------
 # Version
-# ------------------------------------------------------------
-
 set(XSD_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(XSD_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(XSD_VERSION_PATCH "${PROJECT_VERSION_PATCH}")

@@ -1,4 +1,6 @@
-# Bazel build for libxsd-frontend
+#!/bin/bash
+#
+# Update Script for xsd
 #
 # Written by Wissem Chiha <chihawissem08@gmail.com>
 #
