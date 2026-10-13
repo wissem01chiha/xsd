@@ -25,13 +25,13 @@ project(xsd
 
 include(GNUInstallDirs)
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/libxsd-cmake")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # ------------------------------------------------------------
 # Dependencies
 # ------------------------------------------------------------
 include(extern/xercesc)
-add_subdirectory(libxsd-extern/libcutl)
+include(extern/libcutl)
 add_subdirectory(libxsd-extern/libxsd-frontend)
  
 # find_package(libcutl CONFIG REQUIRED)
