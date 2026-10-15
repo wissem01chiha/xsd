@@ -16,36 +16,26 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-set(generators_sources
-    libxsd-frontend/generators/dependencies.cxx
-)
-
-set(sementic_graph_sources
-    libxsd-frontend/semantic-graph/attribute.cxx
-)
-
-set(xsd_frontend_sources
-    libxsd-frontend/types.cxx
-    libxsd-frontend/parser.cxx
-    libxsd-frontend/schema-dom-parser.cxx
-)
-
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/libxsd-frontend/version.hxx.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/libxsd-frontend/version.hxx"
     @ONLY
 )
 
+set(xsd_frontend_sources
+    libxsd-frontend/types.cxx
+    libxsd-frontend/parser.cxx
+    libxsd-frontend/schema-dom-parser.cxx
+    libxsd-frontend/semantic-graph/attribute.cxx
+    libxsd-frontend/generators/dependencies.cxx
+)
+
 if(BUILD_SHARED_LIBS)
     add_library(xsd-frontend SHARED 
-        ${generators_sources}
-        ${sementic_graph_sources}
         ${xsd_frontend_sources}
     )
 else()
     add_library(xsd-frontend STATIC 
-        ${generators_sources}
-        ${sementic_graph_sources}
         ${xsd_frontend_sources}
     )
 endif()
@@ -56,11 +46,10 @@ target_include_directories(xsd-frontend
     PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/xsd-frontend"
         "${cutl_include_dirs}"
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
-target_include_directories(xsd-frontend PRIVATE 
-   ${CMAKE_CURRENT_SOURCE_DIR}
-)    
-
+   
 target_link_libraries(xsd-frontend PRIVATE
     cutl
     xerces-c

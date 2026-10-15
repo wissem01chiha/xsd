@@ -16,13 +16,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-cmake_minimum_required(VERSION 3.16 )
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 project(xsd VERSION 4.2.0 LANGUAGES CXX)
 
-option(BUILD_SHARED_LIBS "Build XSD as shared library" OFF)
+option(BUILD_SHARED_LIBS "Build as shared library" OFF)
 option(BUILD_XSD_EXAMPLES "Build examples scripts" OFF)
 option(BUILD_XSD_TESTS "Build test scripts" OFF)
+option(BUILD_XSD_FRONTEND "Build compiler frontend" ON)
 
 include(GNUInstallDirs)
 
@@ -31,7 +32,10 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 # Dependencies
 include(extern/xercesc)
 include(extern/libcutl)
-add_subdirectory(frontend)
+if(BUILD_XSD_FRONTEND)
+    add_subdirectory(frontend)
+endif()
+
  
 # Version
 set(XSD_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
@@ -63,47 +67,9 @@ math(EXPR XSD_VERSION_NUMBER
     "${XSD_VERSION_NUMBER} + ${XSD_VERSION_PATCH} * 1000"
 )
 
-set(XSD_VERSION_HEADER
-"// file      : xsd/version.hxx
-// license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
+add_subdirectory(lib)
+add_subdirectory(xsd)
 
-#ifndef XSD_VERSION
-
-#define XSD_VERSION       ${XSD_VERSION_NUMBER}ULL
-#define XSD_VERSION_STR   \"${XSD_VERSION_STR}\"
-#define XSD_VERSION_ID    \"${XSD_VERSION_ID}\"
-#define XSD_VERSION_FULL  \"${XSD_VERSION_FULL}\"
-
-#define XSD_VERSION_MAJOR ${XSD_VERSION_MAJOR}
-#define XSD_VERSION_MINOR ${XSD_VERSION_MINOR}
-#define XSD_VERSION_PATCH ${XSD_VERSION_PATCH}
-
-#define XSD_PRE_RELEASE   ${XSD_PRE_RELEASE}
-
-#define XSD_SNAPSHOT      ${XSD_SNAPSHOT}ULL
-#define XSD_SNAPSHOT_ID   \"${XSD_SNAPSHOT_ID}\"
-
-#include <xercesc/util/XercesVersion.hpp>
-#include <libcutl/version.hxx>
-#include <libxsd-frontend/version.hxx>
-
-#endif // XSD_VERSION
-")
-
-file(GENERATE
-    OUTPUT
-        "${CMAKE_CURRENT_BINARY_DIR}/xsd/xsd/version.hxx"
-    CONTENT
-        "${XSD_VERSION_HEADER}"
-)
-
-# ------------------------------------------------------------
-# Sources
-# ------------------------------------------------------------
-
-file(GLOB_RECURSE XSD_SOURCES CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd/*.cxx"
-)
 
 # Don't compile the pregenerated files through the normal source
 # glob. They are explicitly listed below.
@@ -130,25 +96,11 @@ set(XSD_GENERATED_SOURCES
 # Executable
 # ------------------------------------------------------------
 
-add_executable(xsd
-    ${XSD_SOURCES}
-    ${XSD_GENERATED_SOURCES}
-)
 
-target_include_directories(xsd
-    PRIVATE
-         "${CMAKE_CURRENT_BINARY_DIR}/xsd"
-         "${CMAKE_CURRENT_SOURCE_DIR}/xsd"
-         "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd"
-         "${CMAKE_CURRENT_SOURCE_DIR}/xsd/xsd/pregenerated"
-)
 
-target_link_libraries(xsd
-     PRIVATE
-         xsd-frontend
-         cutl
-         xerces-c
-)
+
+
+
 
 get_target_property(xsd-frontend-include-dirs xsd-frontend INCLUDE_DIRECTORIES)
 
