@@ -22,19 +22,19 @@
 // 3.0.0-b.2    0000299999999995020
 // 2.2.0-a.1.z  0000200001999990011
 //
-#define LIBXSD_VERSION       $libxsd.version.project_number$ULL
-#define LIBXSD_VERSION_STR   "$libxsd.version.project$"
-#define LIBXSD_VERSION_ID    "$libxsd.version.project_id$"
-#define LIBXSD_VERSION_FULL  "$libxsd.version$"
+#define LIBXSD_VERSION       @libxsd.version.project_number@ULL
+#define LIBXSD_VERSION_STR   "@libxsd.version.project@"
+#define LIBXSD_VERSION_ID    "@libxsd.version.project_id@"
+#define LIBXSD_VERSION_FULL  "@libxsd.version@"
 
-#define LIBXSD_VERSION_MAJOR $libxsd.version.major$
-#define LIBXSD_VERSION_MINOR $libxsd.version.minor$
-#define LIBXSD_VERSION_PATCH $libxsd.version.patch$
+#define LIBXSD_VERSION_MAJOR @libxsd.version.major@
+#define LIBXSD_VERSION_MINOR @libxsd.version.minor@
+#define LIBXSD_VERSION_PATCH @libxsd.version.patch@
 
-#define LIBXSD_PRE_RELEASE   $libxsd.version.pre_release$
+#define LIBXSD_PRE_RELEASE   @libxsd.version.pre_release@
 
-#define LIBXSD_SNAPSHOT      $libxsd.version.snapshot_sn$ULL
-#define LIBXSD_SNAPSHOT_ID   "$libxsd.version.snapshot_id$"
+#define LIBXSD_SNAPSHOT      @libxsd.version.snapshot_sn@ULL
+#define LIBXSD_SNAPSHOT_ID   "@libxsd.version.snapshot_id@"
 
 // Note that Xerces and Expat compatibility is verified by the respective
 // parsers (see parser/xerces/elements.hxx and parser/expat/elements.hxx for

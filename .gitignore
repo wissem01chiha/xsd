@@ -1,8 +1,9 @@
-.bdep/
 build/
+/build/
 /libxsd-extern/libcutl/cutl/details/config.h
+/xsd/xsd/version.hxx
+
 # Compiler/linker output.
-#
 *.d
 *.t
 *.i
@@ -27,15 +28,6 @@ build/
 *.exe.manifest
 *.pc
 
-# Test executables.
-#
-driver
 
-# XSD-generated files.
-#
-test.?xx
 
-# Testscript output directories (can be symlinks).
-#
-test
-test-driver
+

@@ -22,19 +22,19 @@
 // 3.0.0-b.2    0000299999999995020
 // 2.2.0-a.1.z  0000200001999990011
 //
-#define LIBXSD_FRONTEND_VERSION       $libxsd_frontend.version.project_number$ULL
-#define LIBXSD_FRONTEND_VERSION_STR   "$libxsd_frontend.version.project$"
-#define LIBXSD_FRONTEND_VERSION_ID    "$libxsd_frontend.version.project_id$"
-#define LIBXSD_FRONTEND_VERSION_FULL  "$libxsd_frontend.version$"
+#define LIBXSD_FRONTEND_VERSION       40000200000000ULL
+#define LIBXSD_FRONTEND_VERSION_STR   "4.2.0"
+#define LIBXSD_FRONTEND_VERSION_ID    "4.2.0"
+#define LIBXSD_FRONTEND_VERSION_FULL  "4.2.0"
 
-#define LIBXSD_FRONTEND_VERSION_MAJOR $libxsd_frontend.version.major$
-#define LIBXSD_FRONTEND_VERSION_MINOR $libxsd_frontend.version.minor$
-#define LIBXSD_FRONTEND_VERSION_PATCH $libxsd_frontend.version.patch$
+#define LIBXSD_FRONTEND_VERSION_MAJOR 4
+#define LIBXSD_FRONTEND_VERSION_MINOR 2
+#define LIBXSD_FRONTEND_VERSION_PATCH 0
 
-#define LIBXSD_FRONTEND_PRE_RELEASE   $libxsd_frontend.version.pre_release$
+#define LIBXSD_FRONTEND_PRE_RELEASE   0
 
-#define LIBXSD_FRONTEND_SNAPSHOT      $libxsd_frontend.version.snapshot_sn$ULL
-#define LIBXSD_FRONTEND_SNAPSHOT_ID   "$libxsd_frontend.version.snapshot_id$"
+#define LIBXSD_FRONTEND_SNAPSHOT      0ULL
+#define LIBXSD_FRONTEND_SNAPSHOT_ID   ""
 
 #include <xercesc/util/XercesVersion.hpp>
 
